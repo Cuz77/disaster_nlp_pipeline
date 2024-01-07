@@ -80,7 +80,7 @@ If there's a need to ever retrain the model, it can be done in three steps:
 
 2. Run the train.py file to retrain the model, e.g.:
 
-    `py train_classifier.py "DB/"`
+    `py train_classifier.py DB/`
 
 
 #### Run the app

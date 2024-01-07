@@ -148,32 +148,35 @@ def train_model(X, y, model):
     return best_clf
     
 
-def export_model(model):
+def export_model(model, model_path):
     """
-    Desc: Saves given trained model to 'models\model.pkl'
+    Desc: Saves given trained model to '{model_path}/model.pkl'
 
         Parameters:
-            best_clf (obj): Trained model object
+            model (obj): Trained model object
+            model_path (str): a directory path store the final model
+            
     """
     print('Exporting model...\n')
-    joblib.dump(model, 'models\model.pkl')
+    joblib.dump(model, f'{model_path}model.pkl')
 
 
 def run_pipeline():
     """
     Desc: Runs the complete ML pipeline from loading the dataset, through tuning, to saving final model
     """
-    if len(sys.argv) == 2:
-        dataset_path = sys.argv[1]
+    if len(sys.argv) == 3:
+        dataset_path, model_path = sys.argv[1:]
+        model_path = model_path if model_path[-1] == '/' else model_path + '/'
         X, y = load_data(dataset_path)     # Load dataset
         model = build_model(X, y)          # Build the model
         model = train_model(X, y, model)   # Train the model
-        export_model(model)                # Export the model
+        export_model(model, model_path)    # Export the model
         
         print('All done.')
         
     else:
-        print('This function requires one positional argument:\n-a directory relative path to the disaster_messages.db, e.g. "database/"')
+        print('This function requires one positional argument:\n-a directory relative path to the disaster_messages.db, e.g. "database/"\n-a directory relative path to store the final model, e.g. "model/"')
         
 
     
