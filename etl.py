@@ -15,6 +15,7 @@ def extract_data(messages_path, categories_path):
             messages (obj): Pandas DataFrame object with messages dataset
             categories (obj): Pandas DataFrame object with categories dataset
     """
+    print('Extracting files...\n')
     messages = pd.read_csv(messages_path)
     categories = pd.read_csv(categories_path)
     
@@ -31,6 +32,7 @@ def transform_data(messages, categories):
         Returns:
             df (obj): Complete Pandas DataFrame object with dataset to be processed
     """
+    print('Transforming files...\n')
     # merge datasets
     df = messages.merge(categories, on='id')
 
@@ -72,6 +74,7 @@ def load_data(df, output_path):
             output_path (str): An output directory path
     """
     # Load the data to an SQL database
+    print('Loading files...\n')
     try:
         engine = create_engine(f'sqlite:///{output_path}/disaster_messages.db')
         df.to_sql('disaster_messages', engine, index=False)
@@ -86,16 +89,9 @@ def main():
     """
     if len(sys.argv) == 4:
         messages_path, categories_path, output_path = sys.argv[1:]
-        
-        print('Extracting files...\n')
-        messages, categories = extract_data(messages_path, categories_path)
-        
-        print('Transforming files...\n')
-        df = transform_data(messages, categories)
-
-        print('Loading files...\n')
-        load_data(df, output_path)
-        
+        messages, categories = extract_data(messages_path, categories_path)     # Extract dataset
+        df = transform_data(messages, categories)                               # Tranform dataset
+        load_data(df, output_path)                                              # Load dataset to an SQL database
         print('All done.')
         
     else:

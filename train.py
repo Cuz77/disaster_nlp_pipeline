@@ -23,7 +23,6 @@ from sklearn.pipeline import Pipeline
 
 from sqlalchemy import create_engine
 
-
 # Prevent sklearn from printing ConvergenceWarning (due to max iterations limit)
 import warnings
 from sklearn.exceptions import ConvergenceWarning
@@ -46,6 +45,7 @@ def load_data(dataset_path):
             y (obj): Pandas DataFrame object with target classes 
     """
     # load datasets
+    print('Loading data...\n')
     dataset_path = dataset_path if dataset_path[-1] == '/' else dataset_path + '/' # make sure to include trailing /
     engine = create_engine(f'sqlite:///{dataset_path}disaster_messages.db')
     df = pd.read_sql(f'{dataset_path}disaster_messages', con=engine)
@@ -93,6 +93,8 @@ def build_model(X, y):
         Returns:
             cv (obj): GridSearchCV object with parameters to be tuned
     """
+    print('Building model...\n')
+    # create the pipeline
     pipeline = Pipeline([
                         ('vect', CountVectorizer(tokenizer=tokenize, token_pattern=None)),
                         ('tfidf', TfidfTransformer()),
@@ -121,6 +123,7 @@ def train_model(X, y, model):
         Returns:
             best_clf (obj): Trained model object
     """
+    print('Training model...\n')
     # train test split
     X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=.8)
     
@@ -152,6 +155,7 @@ def export_model(model):
         Parameters:
             best_clf (obj): Trained model object
     """
+    print('Exporting model...\n')
     joblib.dump(model, 'models\model.pkl')
 
 
@@ -161,18 +165,10 @@ def run_pipeline():
     """
     if len(sys.argv) == 2:
         dataset_path = sys.argv[1]
-        
-        print('Loading data...\n')
-        X, y = load_data(dataset_path)
-        
-        print('Building model...\n')
-        model = build_model(X, y)
-
-        print('Training model...\n')
-        model = train_model(X, y, model)
-        
-        print('Exporting model...\n')
-        export_model(model)
+        X, y = load_data(dataset_path)     # Load dataset
+        model = build_model(X, y)          # Build the model
+        model = train_model(X, y, model)   # Train the model
+        export_model(model)                # Export the model
         
         print('All done.')
         

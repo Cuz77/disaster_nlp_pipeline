@@ -58,12 +58,14 @@ The directory structure for this project looks like follows:
 - **development files/** this folder houses Jupyter notebooks used in developing the code (not used by the model)
 - **models/** a directory with the final model trained with train.py
 - **app/** this is where the Flask app sits
+
+##### Main executables:
 - **etl.py** this file runs the ETL pipeline
 - **train.py** this file runs the ML pipeline
 
 
 
-### Instructions:
+## Instructions:
 
 
 #### Re-train the model
@@ -74,21 +76,21 @@ If there's a need to ever retrain the model, it can be done in three steps:
 
 2. Run the etl.py file to prepare the dataset, e.g.:
 
-`py etl.py DB/messages.csv DB/categories.csv DB/`
+    `py etl.py DB/messages.csv DB/categories.csv DB/`
 
 2. Run the train.py file to retrain the model, e.g.:
 
-`py train.py "DB/"`
+    `py train.py "DB/"`
 
 
-#### 2. Run the app
+#### Run the app
 
 To see the results and use the model, run the app accordingly:
 
 1. Open the terminal in the disaster_nlp_pipeline/app directory
 2. Run the app with:
 
-`py run.py"`
+    `py run.py`
 
 3. The home page will show a simple overview of the dataset. To use the model to predict classess of any message, paste it in the dialog box on the top and hit the greenb "Classify Message" button. The app will list all classes, with predicted ones highlighted in green.
 
