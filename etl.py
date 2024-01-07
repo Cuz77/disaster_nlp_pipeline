@@ -5,7 +5,16 @@ from sqlalchemy import create_engine
 
 
 def extract_data(messages_path, categories_path):
+    """
+    Desc: Extracts data from csv files
     
+        Parameters:
+            messages_path (str): a file path to the messages.csv file
+            categories_path (str): a file path to the messages.csv file
+        Returns:
+            messages (obj): Pandas DataFrame object with messages dataset
+            categories (obj): Pandas DataFrame object with categories dataset
+    """
     messages = pd.read_csv(messages_path)
     categories = pd.read_csv(categories_path)
     
@@ -13,7 +22,15 @@ def extract_data(messages_path, categories_path):
 
 
 def transform_data(messages, categories):
+    """
+    Desc: Transforms data from csv files
     
+        Parameters:
+            messages (obj): Pandas DataFrame object with messages dataset
+            categories (obj): Pandas DataFrame object with categories dataset
+        Returns:
+            df (obj): Complete Pandas DataFrame object with dataset to be processed
+    """
     # merge datasets
     df = messages.merge(categories, on='id')
 
@@ -47,7 +64,13 @@ def transform_data(messages, categories):
 
 
 def load_data(df, output_path):
-
+    """
+    Desc: Loads pre-processed data to an SQL database
+    
+        Parameters:
+            messages (obj): Pandas DataFrame object with pre-processed dataset
+            output_path (str): An output directory path
+    """
     # Load the data to an SQL database
     try:
         engine = create_engine(f'sqlite:///{output_path}/disaster_messages.db')
@@ -58,6 +81,9 @@ def load_data(df, output_path):
         
 
 def main():
+    """
+    Desc: Runs the complete ETL pipeline from extracting the dataset, through transforming, to loading dataset to the SQL database
+    """
     if len(sys.argv) == 4:
         messages_path, categories_path, output_path = sys.argv[1:]
         

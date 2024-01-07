@@ -17,7 +17,6 @@ from nltk.stem import WordNetLemmatizer
 
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.linear_model import SGDClassifier
-from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.pipeline import Pipeline
@@ -37,6 +36,15 @@ STOP_WORDS = set(stopwords.words('english'))
 
 
 def load_data(dataset_path):
+    """
+    Desc: Loads a dataset
+    
+        Parameters:
+            dataset_path (str): a directory path where the csv files are stores
+        Returns:
+            X (obj): Pandas Series object with text feature
+            y (obj): Pandas DataFrame object with target classes 
+    """
     # load datasets
     dataset_path = dataset_path if dataset_path[-1] == '/' else dataset_path + '/' # make sure to include trailing /
     engine = create_engine(f'sqlite:///{dataset_path}disaster_messages.db')
@@ -76,6 +84,15 @@ def tokenize(text):
     
     
 def build_model(X, y):
+    """
+    Desc: Builds the NLP model
+
+        Parameters:
+            X (obj): Pandas Series object with text feature
+            y (obj): Pandas DataFrame object with target classes 
+        Returns:
+            cv (obj): GridSearchCV object with parameters to be tuned
+    """
     pipeline = Pipeline([
                         ('vect', CountVectorizer(tokenizer=tokenize, token_pattern=None)),
                         ('tfidf', TfidfTransformer()),
@@ -86,13 +103,24 @@ def build_model(X, y):
     parameters = {'clf__estimator__penalty' : ['l1', 'l2', 'elasticnet'],
                   'clf__estimator__loss': ['hinge', 'log_loss', 'squared_hinge', 'perceptron'],
                   'clf__estimator__max_iter' : [200, 500, 1000]
-                  }meters)
+                  }
+    
+    cv = GridSearchCV(pipeline, param_grid=parameters)
         
     return cv
 
 
 def train_model(X, y, model):
-    
+    """
+    Desc: Trains the NLP model
+
+        Parameters:
+            X (obj): Pandas Series object with text feature
+            y (obj): Pandas DataFrame object with target classes 
+            model (obj): GridSearchCV object with parameters to be tuned
+        Returns:
+            best_clf (obj): Trained model object
+    """
     # train test split
     X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=.8)
     
@@ -118,10 +146,19 @@ def train_model(X, y, model):
     
 
 def export_model(model):
+    """
+    Desc: Saves given trained model to 'models\model.pkl'
+
+        Parameters:
+            best_clf (obj): Trained model object
+    """
     joblib.dump(model, 'models\model.pkl')
 
 
 def run_pipeline():
+    """
+    Desc: Runs the complete ML pipeline from loading the dataset, through tuning, to saving final model
+    """
     if len(sys.argv) == 2:
         dataset_path = sys.argv[1]
         
