@@ -44,7 +44,6 @@ def transform_data(messages, categories):
     category_colnames = row.values
     categories.columns = category_colnames
 
-
     # replace categories' dummy string values (e.g.: '[category_name]-[bool]') with boolean values as int
     for column in categories:
         # set each value to be the last character of the string
@@ -54,10 +53,8 @@ def transform_data(messages, categories):
 
     df.drop(columns=['categories'], inplace=True)
 
-
     # concatenate messages w/ category features
     df = pd.concat([df, categories], axis=1)
-
 
     # drop duplicates
     df.drop_duplicates(inplace=True)

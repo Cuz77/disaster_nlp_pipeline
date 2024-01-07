@@ -10,7 +10,7 @@ from nltk.tokenize import word_tokenize
 
 from flask import Flask
 from flask import render_template, request, jsonify
-from plotly.graph_objs import Bar
+from plotly.graph_objs import Bar, Pie
 
 from sqlalchemy import create_engine
 
@@ -57,18 +57,15 @@ model = joblib.load("..\models\model.pkl")
 @app.route('/index')
 def index():
     
-    # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
-    genre_counts = df.groupby('genre').count()['message']
-    genre_names = list(genre_counts.index)
-    
-    # create visuals
-    # TODO: Below is an example - modify to create your own visuals
-    
+    # get frequences with which each class appears in the dataset
     features = df.loc[:,'related':].columns.to_list()
     features.remove('child_alone')
     prevalence_df = df[features].sum() / df.shape[0]
     prevalence_df = prevalence_df.sort_values()
+
+    # get the percentage of english messages in the dataset
+    df['english'] = df.apply(lambda x: 'english' if (x['message'] == x['original']) or (x['original'] == None) else 'other language', axis = 1)
+    english_percentage = df['english'].value_counts()
 
     graphs = [
         {
@@ -81,16 +78,17 @@ def index():
 
             'layout': {
                 'title': 'Prevalence of clases in the entire training dataset',
+                'height': 600,
                 'yaxis': {
                     'title': "Percentage of all records labeled with a given class"
-                }
+                },
             }
         },
         {
             'data': [
-                Bar(
-                    x=[f.replace('_', ' ') for f in features],
-                    y=prevalence_df.values
+                Pie(
+                    labels=english_percentage.index,
+                    values=english_percentage
                 )
             ],
 

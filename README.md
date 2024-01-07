@@ -48,8 +48,8 @@ The directory structure for this project looks like follows:
     │   │   └── master.html
     │   └── run.py
     ├── .gitignore
-    ├── etl.py
-    ├── train.py
+    ├── process_data.py
+    ├── train_classifier.py
     └── README.md
 
 
@@ -60,8 +60,8 @@ The directory structure for this project looks like follows:
 - **app/** this is where the Flask app sits
 
 ##### Main executables:
-- **etl.py** this file runs the ETL pipeline
-- **train.py** this file runs the ML pipeline
+- **process_data.py** this file runs the ETL pipeline
+- **train_classifier.py** this file runs the ML pipeline
 
 
 
@@ -76,11 +76,11 @@ If there's a need to ever retrain the model, it can be done in three steps:
 
 2. Run the etl.py file to prepare the dataset, e.g.:
 
-    `py etl.py DB/messages.csv DB/categories.csv DB/`
+    `py process_data.py DB/messages.csv DB/categories.csv DB/`
 
 2. Run the train.py file to retrain the model, e.g.:
 
-    `py train.py "DB/"`
+    `py train_classifier.py "DB/"`
 
 
 #### Run the app
