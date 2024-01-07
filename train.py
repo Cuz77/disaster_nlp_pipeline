@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import nltk
 import numpy as np
 import pandas as pd
-import pickle
+import joblib
 
 nltk.download('wordnet')
 nltk.download('punkt') 
@@ -41,10 +41,6 @@ def load_data(dataset_path):
     dataset_path = dataset_path if dataset_path[-1] == '/' else dataset_path + '/' # make sure to include trailing /
     engine = create_engine(f'sqlite:///{dataset_path}disaster_messages.db')
     df = pd.read_sql(f'{dataset_path}disaster_messages', con=engine)
-    
-    # remove the 'child_alone' feature that doesn't seem to appear at all in the dataset
-    features = df.loc[:,'related':].columns.to_list()
-    features.remove('child_alone')
 
     # define X and y
     X = df['message']
@@ -53,35 +49,33 @@ def load_data(dataset_path):
     return X, y
 
 
+def tokenize(text):
+    """
+    Desc: Returns cleaned and lemmatized tokens from a text to be used by an NLP vectorizer
+
+        Parameters:
+            text (str): a document to be processed (e.g. a twitter message)
+        Returns:
+            clean_tokens (list[str]): a list of cleaned and lemmatized word tokens
+    """
+    # find and replace all hyperlinks 
+    urls = re.findall(URL_REGEX, text)
+
+    for url in urls:
+        text = text.replace(url, '<url>')
+
+    # tokenize
+    tokens = word_tokenize(text)
+
+    # lemmatize and clean words
+    lemmatizer = WordNetLemmatizer()
+    clean_tokens = [lemmatizer.lemmatize(tok).lower().strip() for tok in tokens]
+    clean_tokens = [tok for tok in clean_tokens if tok not in STOP_WORDS]
+
+    return clean_tokens
+    
+    
 def build_model(X, y):
-    
-    # text processing and model pipeline
-    def tokenize(text):
-        """
-        Desc: Returns cleaned and lemmatized tokens from a text to be used by an NLP vectorizer
-
-            Parameters:
-                text (str): a document to be processed (e.g. a twitter message)
-            Returns:
-                clean_tokens (list[str]): a list of cleaned and lemmatized word tokens
-        """
-        # 
-        urls = re.findall(URL_REGEX, text)
-
-        for url in urls:
-            text = text.replace(url, '<url>')
-
-        #
-        tokens = word_tokenize(text)
-        lemmatizer = WordNetLemmatizer()
-
-        #
-        clean_tokens = [lemmatizer.lemmatize(tok).lower().strip() for tok in tokens]
-        clean_tokens = [tok for tok in clean_tokens if tok not in STOP_WORDS]
-
-        return clean_tokens
-    
-    
     pipeline = Pipeline([
                         ('vect', CountVectorizer(tokenizer=tokenize, token_pattern=None)),
                         ('tfidf', TfidfTransformer()),
@@ -92,9 +86,7 @@ def build_model(X, y):
     parameters = {'clf__estimator__penalty' : ['l1', 'l2', 'elasticnet'],
                   'clf__estimator__loss': ['hinge', 'log_loss', 'squared_hinge', 'perceptron'],
                   'clf__estimator__max_iter' : [200, 500, 1000]
-                  }
-    
-    cv = GridSearchCV(pipeline, param_grid=parameters)
+                  }meters)
         
     return cv
 
@@ -106,7 +98,7 @@ def train_model(X, y, model):
     
     # fit model
     best_clf = model.fit(X_train, y_train)
-    print(f'\n{best_clf.best_params_}\n')
+    print(f'Best parameters: {best_clf.best_params_}\n')
     
     # output model test results
     y_pred = best_clf.predict(X_test)
@@ -120,13 +112,13 @@ def train_model(X, y, model):
 
     report_df.index = pred_df.columns
     print('Success:\n', report_df.mean(), '\n\n')
-    print('Detailed report:\n',report_df)
+    print('Detailed report:\n',report_df, '\n')
     
     return best_clf
     
 
 def export_model(model):
-    pickle.dump(model, open(f'models/model.pkl', 'wb'))
+    joblib.dump(model, 'models\model.pkl')
 
 
 def run_pipeline():

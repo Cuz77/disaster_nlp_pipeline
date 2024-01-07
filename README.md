@@ -61,6 +61,18 @@ TODO.....................
 
 
 ### Instructions:
+
+
+#### 1. ETL
+
+
+
+#### 2. Re-train the model
+
+
+
+#### 3. Run the app
+
 <!-- 1. Run the following commands in the project's root directory to set up your database and model.
 
     - To run ETL pipeline that cleans data and stores in database
