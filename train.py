@@ -1,7 +1,6 @@
 # import libraries
 import re
 import sys
-import matplotlib.pyplot as plt
 import nltk
 import numpy as np
 import pandas as pd
@@ -17,6 +16,7 @@ from nltk.stem import WordNetLemmatizer
 
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.linear_model import SGDClassifier
+from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.pipeline import Pipeline

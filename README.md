@@ -11,19 +11,19 @@ This project has been created as a part of the Udacity Nanodegree Data Scientist
 ## Dependencies
 
 Libraries used for this project:
-
-- pandas
-- matplotlib
-- numpy
-- sklearn for modeling, testing, and assesing
-- wordcloud
-- collections
+- joblib
+- nltk
+- re
+- sklearn
+- sqlalchemy
+- sys
+- warnings
 
 
 
 ## Summary
 
-TODO.....................
+This repository houses files for NLP ML algorythm that can predict themes for messages related to natural disasters. The project includes an ETL pipeline for datasets provided in csv files, ML pipeline with tuned hyperparameters, and a Flask app that can be used to predict themese for new messages.
 
 
 
@@ -35,56 +35,62 @@ The directory structure for this project looks like follows:
     ├── DB/
     │   ├── messages.csv
     │   ├── categories.csv
-    │   ├── DB.db
+    │   └── DB.db
     ├── development files/
     │   ├── etl_development.ipynb
     │   ├── ml_pipeline.ipynb
-    │   ├── DB/
+    │   └── DB/
     ├── models/
-    │   ├── model.pkl
+    │   └── model.pkl
     ├── app/
-    │   ├── ff
-    │   ├── ff
+    │   ├── templates/
+    │   │   ├── go.html
+    │   │   └── master.html
+    │   └── run.py
     ├── .gitignore
     ├── etl.py
     ├── train.py
     └── README.md
 
 
-TODO.....................
-
-
-- **DB** folder contains three csv files with the data
-- **boston_airbnb_analysis.ipynb** holds the main code for analysis
-- **.gitignore** file used mostly to avoid uploading jupiter checkpoints
+##### Main directories:
+- **DB/** folder containing two csv files and SQL database pre-processed with etl.py
+- **development files/** this folder houses Jupyter notebooks used in developing the code (not used by the model)
+- **models/** a directory with the final model trained with train.py
+- **app/** this is where the Flask app sits
+- **etl.py** this file runs the ETL pipeline
+- **train.py** this file runs the ML pipeline
 
 
 
 ### Instructions:
 
 
-#### 1. ETL
+#### Re-train the model
+
+If there's a need to ever retrain the model, it can be done in three steps:
+
+1. Replaced the DB/messages.csv and DB/categories.csv files with new data if necessary
+
+2. Run the etl.py file to prepare the dataset, e.g.:
+
+`py etl.py DB/messages.csv DB/categories.csv DB/`
+
+2. Run the train.py file to retrain the model, e.g.:
+
+`py train.py "DB/"`
 
 
+#### 2. Run the app
 
-#### 2. Re-train the model
+To see the results and use the model, run the app accordingly:
 
+1. Open the terminal in the disaster_nlp_pipeline/app directory
+2. Run the app with:
 
+`py run.py"`
 
-#### 3. Run the app
-
-<!-- 1. Run the following commands in the project's root directory to set up your database and model.
-
-    - To run ETL pipeline that cleans data and stores in database
-        `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db`
-    - To run ML pipeline that trains classifier and saves
-        `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
-
-2. Go to `app` directory: `cd app`
-
-3. Run your web app: `python run.py`
-
-4. Click the `PREVIEW` button to open the homepage -->
+3. The home page will show a simple overview of the dataset. To use the model to predict classess of any message, paste it in the dialog box on the top and hit the greenb "Classify Message" button. The app will list all classes, with predicted ones highlighted in green.
 
 
 
@@ -93,25 +99,7 @@ TODO.....................
 The dataset consists of two csv files provided Figure Eight:
 1. categories - a file with messages ids labaled with 36 themes either present (1) or not (0) in a given message
 2. messages - a file with translated messages pertaining to natural disasters response
-    
-
-
-## Data preparation
-
-
-
-TODO.....................
-
-
-Categorical variables has been transformed accordingly:
-- one-hot encoding has been processed for nominal features
-- a feature containing list of available amenities has been transformed into a list of unique values before performing one-hot encoding
-- missing values have been replaced with 0s in a separate column denoting a lack of given option since lack of information can impact user behaviour
-
-Numerical variables has been transformed accordingly:
-- missing values have been replaced with means to not loose data
-- 98% of listings do not show square feet so that feature has been dropped
-    
+     
     
 
 ## Acknowledgements
