@@ -11,8 +11,13 @@ This project has been created as a part of the Udacity Nanodegree Data Scientist
 ## Dependencies
 
 Libraries used for this project:
+- flask
 - joblib
+- json
 - nltk
+- numpy
+- pandas
+- plotly
 - re
 - sklearn
 - sqlalchemy
@@ -78,9 +83,9 @@ If there's a need to ever retrain the model, it can be done in three steps:
 
     `py process_data.py DB/messages.csv DB/categories.csv DB/`
 
-2. Run the train.py file to retrain the model, e.g.:
+2. Run the train.py file to retrain the model to a given directory, e.g.:
 
-    `py train_classifier.py DB/`
+    `py train_classifier.py DB/ models/`
 
 
 #### Run the app
