@@ -77,7 +77,7 @@ def load_data(df, output_path):
     print('Loading files...\n')
     try:
         engine = create_engine(f'sqlite:///{output_path}/disaster_messages.db')
-        df.to_sql('disaster_messages', engine, index=False)
+        df.to_sql('DB/disaster_messages', engine, index=False)
         
     except Exception as e:
         print(e)

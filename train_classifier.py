@@ -48,7 +48,7 @@ def load_data(dataset_path):
     print('Loading data...\n')
     dataset_path = dataset_path if dataset_path[-1] == '/' else dataset_path + '/' # make sure to include trailing /
     engine = create_engine(f'sqlite:///{dataset_path}disaster_messages.db')
-    df = pd.read_sql(f'{dataset_path}disaster_messages', con=engine)
+    df = pd.read_sql(f'DB/disaster_messages', con=engine)
 
     features = ['related', 'request', 'offer', 'aid_related', 'medical_help', 'medical_products', 'search_and_rescue', 'security', 'military', 'water', 'food', 'shelter', 
                 'clothing', 'money', 'missing_people', 'refugees', 'death', 'other_aid', 'infrastructure_related', 'transport', 'buildings', 'electricity', 'tools', 
