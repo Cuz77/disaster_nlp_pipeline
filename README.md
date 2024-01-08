@@ -97,7 +97,7 @@ To see the results and use the model, run the app accordingly:
 2. Run the app with:
 
     `py run.py`
-    
+
 3. Open this port address in your browser: http://192.168.1.8:3000/ 
 
 4. The home page will show a simple overview of the dataset. To use the model to predict classess of any message, paste it in the dialog box on the top and hit the greenb "Classify Message" button. The app will list all classes, with predicted ones highlighted in green.
@@ -115,3 +115,5 @@ The dataset consists of two csv files provided Figure Eight:
 ## Acknowledgements
 
 The dataset has been provided by Figure Eight as a part of Udacity Nanodegree Data Science course.
+
+The Flask app has been set up with template code provided by Udacity with little customization.
