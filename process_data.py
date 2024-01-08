@@ -55,6 +55,9 @@ def transform_data(messages, categories):
 
     # concatenate messages w/ category features
     df = pd.concat([df, categories], axis=1)
+    
+    # drop messages not equal to 1 or 0 as clutter
+    df = df[df['related'] != 2]
 
     # drop duplicates
     df.drop_duplicates(inplace=True)
