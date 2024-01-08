@@ -93,11 +93,14 @@ If there's a need to ever retrain the model, it can be done in three steps:
 To see the results and use the model, run the app accordingly:
 
 1. Open the terminal in the disaster_nlp_pipeline/app directory
+
 2. Run the app with:
 
     `py run.py`
+    
+3. Open this port address in your browser: http://192.168.1.8:3000/ 
 
-3. The home page will show a simple overview of the dataset. To use the model to predict classess of any message, paste it in the dialog box on the top and hit the greenb "Classify Message" button. The app will list all classes, with predicted ones highlighted in green.
+4. The home page will show a simple overview of the dataset. To use the model to predict classess of any message, paste it in the dialog box on the top and hit the greenb "Classify Message" button. The app will list all classes, with predicted ones highlighted in green.
 
 
 
