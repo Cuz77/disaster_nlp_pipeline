@@ -28,6 +28,9 @@ Libraries used for this project:
 
 ## Summary
 
+This project could be utilized to categorize messages in real time in order to help response teams to deliver necessary help to anyone affected by natural disasters.
+
+
 This repository houses files for NLP ML algorythm that can predict themes for messages related to natural disasters. The project includes an ETL pipeline for datasets provided in csv files, ML pipeline with tuned hyperparameters, and a Flask app that can be used to predict themese for new messages.
 
 
